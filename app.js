@@ -1,11 +1,14 @@
-const express = require("express");
+const express = require("express"),
+  morgan = require("morgan");
 
-app = express();
+const app = express();
+
+app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
-  res.send("Hello, world!!!");
+  console.log(req.query);
+  res.send("search: " + req.query.search);
 });
-
 
 app.post("/", (req, res) => {
   res.send("POST method");
@@ -15,7 +18,6 @@ app.get("/catalog/:id/section/:part", (req, res) => {
   const info = "catalog: " + req.params.id + " section: " + req.params.part;
   res.send(info);
 });
-
 
 app
   .route("/user")
@@ -32,5 +34,4 @@ app
     res.send("delete user");
   });
 
-
-app.listen(3000, () => console.log("server running...3000"));
+app.listen(3005, () => console.log("server running...3005"));
