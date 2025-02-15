@@ -1,14 +1,16 @@
 const express = require("express"),
 	router = express.Router(); 
 
+  const config = require("../config/index");
 
-router.get("/", (req, res) => {
-  // res.send("search: " + req.query.search);
+  router.get("/", (req, res) => {
+    // res.send("search: " + req.query.search);
 
-  res.render("pages/index", {
-    title: "Home page Express",
+    res.render("pages/index", {
+      title: "Home page Express",
+      siteName: config.siteName,
+    });
   });
-});
 
 router.post("/", (req, res) => {
   res.send("POST method");
