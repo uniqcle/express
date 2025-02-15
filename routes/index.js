@@ -3,12 +3,27 @@ const express = require("express"),
 
 
 router.get("/", (req, res) => {
-  console.log(req.query);
-  res.send("search: " + req.query.search);
+  // res.send("search: " + req.query.search);
+
+  res.render("pages/index", {
+    title: "Home page Express",
+  });
 });
 
 router.post("/", (req, res) => {
   res.send("POST method");
+});
+
+router.get("/pricing", (req, res) => {
+  res.render("pages/pricing", {
+    compare_plans: true,
+  });
+});
+
+router.get("/checkout", (req, res) => {
+  res.render("pages/checkout", {
+    title: "Checkout page...",
+  });
 });
 
 

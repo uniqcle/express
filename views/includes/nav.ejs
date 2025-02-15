@@ -1,0 +1,38 @@
+<%
+
+let menu = [
+{
+	title: 'Pricing', 
+	url: '/pricing'
+}, 
+{
+	title: 'Checkout', 
+	url: '/checkout'
+}, 
+{
+	title: 'Features', 
+	url: '/features'
+}, {
+	title: 'Support', 
+	url: '/support'
+}
+]
+
+%>
+
+
+
+<nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+
+
+  	<% menu.forEach( item => { %> 
+
+		  <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="<%= item.url %>"
+    > <%=item.title %> </a>
+ 
+
+	<% }) %>
+
+
+
+</nav>
