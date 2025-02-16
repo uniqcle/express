@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
 app.use("/catalog", catalogRouter);
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "static")));
