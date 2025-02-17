@@ -1,11 +1,17 @@
-const express = require('express'),
-	router = express.Router(); 
+const express = require("express"),
+  router = express.Router();
+
+const { ObjectId } = require("mongodb");
+
 const { Connection } = require("../ext/connection");
 
 const collection = "users";
 
 Connection.connectToMongo();
 
+/////////////////////////////////////////
+// Listing данных
+/////////////////////////////////////////
 router.route("/").get(async (req, res) => {
   let content = [];
 
@@ -23,32 +29,70 @@ router.route("/").get(async (req, res) => {
 
 router
   .route("/:id")
-  .get((req, res) => {
-    res.send("get user");
-
+  .get(async (req, res) => {
     const id = req.params.id;
 
     let content = {
       name: "",
-      age: "",
+      lastname: "",
       email: "",
+      phone: "",
       _id: id,
     };
 
-    res.prependListener("pages/user", {
-      title: "User Page",
+    if (req.params.id !== "create") {
+      try {
+        content = await Connection.db
+          .collection(collection)
+          .findOne({ _id: new ObjectId(id) });
+
+        console.log(content);
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    res.render("pages/user", {
+      title: "Update Page",
       content,
     });
   })
-  .post((req, res) => {
-    res.send("create user");
+  /////////////////////////////////////////
+  // Добавление данных
+  /////////////////////////////////////////
+  .post(async (req, res) => {
+    const result = await Connection.db
+      .collection(collection)
+      .insertOne(req.body);
+
+    res.redirect("/users");
   })
-  .put((req, res) => {
-    res.send("update user");
+  /////////////////////////////////////////
+  // Обновление данных
+  /////////////////////////////////////////
+  .put(async (req, res) => {
+    const id = req.params.id;
+
+    console.log("Идет перезапись в БД: ", id);
+
+    const result = await Connection.db
+      .collection(collection)
+      .findOneAndReplace({ _id: new ObjectId(id) }, req.body);
+    console.log(result);
+
+    await res.json({ message: "Данные обновлены" });
   })
-  .delete((req, res) => {
-    res.send("delete user");
+  /////////////////////////////////////////
+  // Удаление данных
+  /////////////////////////////////////////
+  .delete(async (req, res) => {
+    const id = req.params.id;
+
+    const result = await Connection.db
+      .collection(collection)
+      .deleteOne({ _id: new ObjectId(id) });
+
+    await res.json({ message: "Пользователь удален" });
   });
 
-
-module.exports = router; 
+module.exports = router;

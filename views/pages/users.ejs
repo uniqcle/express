@@ -137,12 +137,12 @@ console.log(content)
 <% content.forEach((item, index) => { %> 
 <tr></tr>
       <th scope="row"><%=index+1%></th>
-      <td><%=item['name'];%></td>
-      <td><%=item['lastname'];%></td>
-      <td><%=item['email'];%></td>
-	  <td><%=item['phone'];%></td>
-	   <td><button type="button" class="btn btn-outline-primary btn-sm">update</button></td>
-	    <td><button type="button" class="btn btn-outline-danger btn-sm">delete</button>
+      <td><%=item.name;%></td>
+      <td><%=item.lastname;%></td>
+      <td><%=item.email;%></td>
+	  <td><%=item.phone;%></td>
+	   <td><a href="/users/<%= item._id %>" type="button" class="btn btn-outline-primary btn-sm">update</a></td>
+	    <td><a data-id="<%= item._id %>" type="button" class="btn btn-outline-danger btn-sm del">delete</a>
 </td>
     </tr>
 <% }) %> 

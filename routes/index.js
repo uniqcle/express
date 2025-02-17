@@ -23,11 +23,6 @@ router.get("/pricing", (req, res) => {
 });
 
 
-router.get("/create", (req, res) => {
-  res.render("pages/user", {
-    title: "Create",
-  });
-});
 
 router.get("/checkout", (req, res) => {
   res.render("pages/checkout", {

@@ -1,3 +1,8 @@
+<%-
+ 
+
+%>
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
   <%- include('../includes/head') %>
@@ -113,25 +118,25 @@
       <main>
         <div class="row">
           
-            <form class="grid text-center">
+            <form class="grid text-center" data-id="<%= content._id %>" id="form" action="/users/<%= content._id %>" method="post" autocomplete="off">
              <div class="row">
 
 					<div class="col-md-6 mb-3">
-						<input type="text" class="form-control" placeholder="Имя" aria-label="First name">
+						<input name="name" type="text" value="<%= content.name %>" class="form-control" placeholder="Имя" aria-label="First name">
 					</div>
 
 
 					<div class="col-md-6 mb-3">
-						<input type="text" class="form-control" placeholder="Фамилия" aria-label="Last name">
+						<input name="lastname" value="<%= content.lastname %>" type="text" class="form-control" placeholder="Фамилия" aria-label="Last name">
 					</div>
  
 					<div class="col-md-6 mb-3">
-						<input type="text" class="form-control" placeholder="Возраст" aria-label="First name">
+						<input name="email" value="<%= content.email %>" type="text" class="form-control" placeholder="Почта" aria-label="First name">
 					</div>
 
 
 					<div class="col-md-6 mb-3">
-						<input type="text" class="form-control" placeholder="Телефон" aria-label="Last name">
+						<input name="phone" value="<%= content.phone %>" type="text" class="form-control" placeholder="Телефон" aria-label="Last name">
 					</div>
 			
 			</div>
