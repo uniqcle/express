@@ -1,24 +1,30 @@
 const express = require("express"),
   router = express.Router();
 
-const { ObjectId } = require("mongodb");
+// for mongodb
+// const { ObjectId } = require("mongodb");
+// const { Connection } = require("../ext/mongodb");
+// const collection = "users";
+// Connection.connectToMongo();
 
-const { Connection } = require("../ext/connection");
-
-const collection = "users";
-
-Connection.connectToMongo();
+// for mongoose
+const  User  = require('../models/User')
 
 /////////////////////////////////////////
 // Listing данных
 /////////////////////////////////////////
-router.route("/").get(async (req, res) => {
+router.route("/").get(async (req, res, next) => {
   let content = [];
 
   try {
-    content = await Connection.db.collection(collection).find({}).toArray();
+    // for mongodb
+    // content = await Connection.db.collection(collection).find({}).toArray();
+
+    //for mongoose
+    content = await User.find({});
+
   } catch (err) {
-    throw err;
+    return next(err);
   }
 
   res.render("pages/users", {
@@ -29,7 +35,7 @@ router.route("/").get(async (req, res) => {
 
 router
   .route("/:id")
-  .get(async (req, res) => {
+  .get(async (req, res, next) => {
     const id = req.params.id;
 
     let content = {
@@ -42,11 +48,15 @@ router
 
     if (req.params.id !== "create") {
       try {
-        content = await Connection.db
-          .collection(collection)
-          .findOne({ _id: new ObjectId(id) });
+        // for mongodb
+        // content = await Connection.db.collection(collection).findOne({ _id: new ObjectId(id) });
+
+        //for mongoose
+        content = await User.findById(id).exec(); 
+        let userUpperCase = await content.getNameInUpperCase(); 
+
       } catch (err) {
-        throw err;
+        return next(err);
       }
     }
 
@@ -58,30 +68,39 @@ router
   /////////////////////////////////////////
   // Добавление данных
   /////////////////////////////////////////
-  .post(async (req, res) => {
+  .post(async (req, res, next) => {
 
+    //for mongodb
+    // const result = await Connection.db.collection(collection).insertOne(req.body);
+
+    try {
+      //for mongoose
+      let user = new User(req.body); 
+      await user.save()
+    } catch (err) {
+      return next(err)
+    }
     
-
-    const result = await Connection.db
-      .collection(collection)
-      .insertOne(req.body);
-
-    res.redirect("/users");
+    //res.redirect("/users");
   })
   /////////////////////////////////////////
   // Обновление данных
   /////////////////////////////////////////
-  .put(async (req, res) => {
+  .put(async (req, res, next) => {
     const id = req.params.id;
 
-    console.log("Идет перезапись в БД: ", id);
+     //for mongodb
+    //  const result = await Connection.db.collection(collection).findOneAndReplace({ _id: new ObjectId(id) }, req.body);
+    
+    try {
+      //for mongoose
+      await User.findByIdAndUpdate(id, req.body, { runValidators: true });
 
-    const result = await Connection.db
-      .collection(collection)
-      .findOneAndReplace({ _id: new ObjectId(id) }, req.body);
-    console.log(result);
+      await res.json({ message: "Данные обновлены" });
+    } catch (err) {
+      return next(err)
+    }
 
-    await res.json({ message: "Данные обновлены" });
   })
   /////////////////////////////////////////
   // Удаление данных
@@ -89,11 +108,20 @@ router
   .delete(async (req, res) => {
     const id = req.params.id;
 
-    const result = await Connection.db
-      .collection(collection)
-      .deleteOne({ _id: new ObjectId(id) });
+    //for mongodb
+    // const result = await Connection.db.collection(collection).deleteOne({ _id: new ObjectId(id) });
 
-    await res.json({ message: "Пользователь удален" });
+    try {
+
+      await User.findByIdAndDelete(id)
+      
+      await res.json({ message: "Пользователь удален" });
+
+    } catch (err) {
+      return res.status(400).json({message: 'Произошла ошибка'})
+    }
+
+    
   });
 
 module.exports = router;
