@@ -45,8 +45,6 @@ router
         content = await Connection.db
           .collection(collection)
           .findOne({ _id: new ObjectId(id) });
-
-        console.log(content);
       } catch (err) {
         throw err;
       }
@@ -61,6 +59,9 @@ router
   // Добавление данных
   /////////////////////////////////////////
   .post(async (req, res) => {
+
+    
+
     const result = await Connection.db
       .collection(collection)
       .insertOne(req.body);
