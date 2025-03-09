@@ -1,8 +1,6 @@
-const mongoose = require('../ext/mongoose'); 
+const mongoose = require("../db/mongoose");
 
 const schema = new mongoose.Schema({
- 
-
   name: {
     type: String,
     required: true,
@@ -30,16 +28,16 @@ const schema = new mongoose.Schema({
     maxlength: 12,
     minlength: 4,
     trim: true,
-	},
-	created: {
-		type: Date, 
-		default: Date.now()
-  }
+  },
+  created: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 schema.methods.getNameInUpperCase = function () {
-	let name = this.name + ' ' + this.lastname; 
-	return name.toUpperCase(); 
-}
+  let name = this.name + " " + this.lastname;
+  return name.toUpperCase();
+};
 
-module.exports = mongoose.model('User', schema)
+module.exports = mongoose.model("User", schema);

@@ -1,5 +1,9 @@
 require("dotenv").config();
 
+////////////////////////////////////////
+// https://www.youtube.com/watch?v=XDULCQpvZ1s&list=PLyoER-nLKaa7w44twy5g4lnnWsRi18mg2
+/////////////////////////////////////////
+
 const express = require("express"),
   morgan = require("morgan"),
   path = require("path");
@@ -38,7 +42,16 @@ app.use((err, req, res, next) => {
   // }
   // return res.status(500).json({ error: 'Внутренняя ошибка сервера', message: err.message });
 
-  res.status(500).send('Что-то сломалось!')
+  let message = "Что-то сломалось!",
+    status = 500;
+
+  if (err.type == "Joi") {
+    message = err.error;
+  }
+  res.status(status).render("pages/error", {
+    status,
+    message,
+  });
 });
 
 
